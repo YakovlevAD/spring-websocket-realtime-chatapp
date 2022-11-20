@@ -5,6 +5,7 @@ import com.arisusantolie.springwebsocketrealtimechatapp.dto.MessageGroupDTO;
 import com.arisusantolie.springwebsocketrealtimechatapp.service.MessageService;
 import com.arisusantolie.springwebsocketrealtimechatapp.service.UserAndGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,9 +28,13 @@ public class MessageControllers {
 
     @MessageMapping("/chat/{to}")
     public void sendMessagePersonal(@DestinationVariable String to, MessageDTO message) {
+        messageService.sendMessage(to, message);
 
-        messageService.sendMessage(to,message);
+    }
 
+    @GetMapping("getMessagesById/{id}")
+    public ResponseEntity getMessagesById(@PathVariable("id")String id) {
+        return ResponseEntity.ok(messageService.getMessagesById(id));
     }
 
     @GetMapping("listmessage/{from}/{to}")
