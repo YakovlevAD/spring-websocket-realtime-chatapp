@@ -92,11 +92,37 @@ INSERT INTO `group_messages` (`id`, `group_id`, `user_id`, `messages`, `created_
 -- Struktur dari tabel `messages`
 --
 
+CREATE TABLE `chats` (
+  `id_chat` VARCHAR(255) DEFAULT NULL,
+  `subscribers` VARCHAR(2550) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `events` (
+  `id` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` VARCHAR(255) DEFAULT NULL,
+  `location` VARCHAR(255) DEFAULT NULL,
+  `likes` VARCHAR(255) DEFAULT NULL,
+  `timestampStart` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `prevEvents` (
+    'ownerId' VARCHAR (255) DEFAULT NULL,
+    'id' VARCHAR (255) DEFAULT NULL,
+    'createrId' VARCHAR (255) DEFAULT NULL,
+    'status' VARCHAR (255) DEFAULT NULL,
+    'duration' VARCHAR (255) DEFAULT NULL,
+    'title' VARCHAR (255) DEFAULT NULL,
+    'body' VARCHAR (255) DEFAULT NULL,
+    'dateStart' VARCHAR (255) DEFAULT NULL,
+    'isPublicEvent' VARCHAR (255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
   `message_text` varchar(255) DEFAULT NULL,
-  `message_from` int(11) DEFAULT NULL,
-  `message_to` int(11) DEFAULT NULL,
+  `message_from` VARCHAR(255) DEFAULT NULL,
+  `message_to` VARCHAR(255) DEFAULT NULL,
   `created_datetime` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
