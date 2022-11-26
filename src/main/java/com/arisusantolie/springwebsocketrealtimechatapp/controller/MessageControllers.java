@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @CrossOrigin
 public class MessageControllers {
@@ -41,6 +42,11 @@ public class MessageControllers {
     public void sendMessageToGroup(@DestinationVariable Integer to, MessageGroupDTO message) {
         messageService.sendMessageGroup(to,message);
 
+    }
+
+    @MessageMapping("/log/{from}")
+    public void logFromApp(@DestinationVariable String from, String appLog) {
+        log.debug(String.format("LOGAPP [%s] %s", from, appLog));
     }
 
     @GetMapping("listmessage/group/{groupid}")
