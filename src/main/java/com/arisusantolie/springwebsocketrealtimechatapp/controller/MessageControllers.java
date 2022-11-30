@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -52,6 +51,12 @@ public class MessageControllers {
     @GetMapping("listmessage/group/{groupid}")
     public List<Map<String,Object>> getListMessageGroupChat(@PathVariable("groupid") Integer groupid){
         return messageService.getListMessageGroups(groupid);
+    }
+
+    @GetMapping("/v1/getAllEvents")
+    public List<CEvent> getAllEventsV1(){
+        log.debug(String.format("REST RQ <<< /v1/getAllEvents"));
+        return messageService.getAllEventsV1();
     }
 
     @GetMapping("/fetchAllUsers/{myId}")

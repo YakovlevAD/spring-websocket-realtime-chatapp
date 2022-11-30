@@ -1,0 +1,197 @@
+########### CMessage ########################################################################################
+
+CREATE TABLE `cMessages` (
+    `id` VARCHAR(255) DEFAULT NULL,
+    `messageText` VARCHAR(255) DEFAULT NULL,
+    `messageFrom` VARCHAR(255) DEFAULT NULL,
+    `messageTo` VARCHAR(255) DEFAULT NULL,
+    `createdDatetime` VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+jdbcTemplate.update("insert into cMessages (id, messageText, messageFrom, messageTo, createdDatetime) " +
+                "values (?,?,?,?,?)", dto.id, dto.messageText, dto.messageFrom, dto.messageTo, dto.createdDatetime);
+
+var resultList = jdbcTemplate.queryForList("select * from cMessages");
+var list = resultList.stream()
+                .map(el -> {
+                    var dto = new CMessage();
+                    dto.id = el.get("id").toString();
+                    dto.messageText = el.get("messageText").toString();
+                    dto.messageFrom = el.get("messageFrom").toString();
+                    dto.messageTo = el.get("messageTo").toString();
+                    dto.createdDatetime = el.get("createdDatetime").toString();
+                    log.debug(String.format("REST RS >>> /v1/getAllEvents event:%s", dto));
+                    return dto;
+                }).collect(Collectors.toList());
+        return list;
+
+struct CMessage: Codable {
+    var id: String
+    var messageText: String
+    var messageFrom: String
+    var messageTo: String
+    var createdDatetime: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case messageText
+        case messageFrom
+        case messageTo
+        case createdDatetime
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.id(id, forKey: .id)
+        try container.messageText(messageText, forKey: .messageText)
+        try container.messageFrom(messageFrom, forKey: .messageFrom)
+        try container.messageTo(messageTo, forKey: .messageTo)
+        try container.createdDatetime(createdDatetime, forKey: .createdDatetime)
+    }
+
+    init(from decoder: Decoder) throws {
+        id = try container.decode(String.self, forKey: .id)
+        messageText = try container.decode(String.self, forKey: .messageText)
+        messageFrom = try container.decode(String.self, forKey: .messageFrom)
+        messageTo = try container.decode(String.self, forKey: .messageTo)
+        createdDatetime = try container.decode(String.self, forKey: .createdDatetime)
+    }
+}
+
+########### CUser ########################################################################################
+DROP TABLE IF EXISTS cUser
+CREATE TABLE `cUsers` (
+    `id` VARCHAR(255) DEFAULT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `userName` VARCHAR(255) DEFAULT NULL,
+    `sphere` VARCHAR(255) DEFAULT NULL,
+    `avatarUrl` VARCHAR(255) DEFAULT NULL,
+    `gender` VARCHAR(255) DEFAULT NULL,
+    `bio` VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+struct CUser: Codable {
+    var id: String
+    var email: String
+    var userName: String
+    var sphere: String
+    var avatarUrl: String
+    var gender: String
+    var bio: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case email
+        case userName
+        case sphere
+        case avatarUrl
+        case gender
+        case bio
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.id(id, forKey: .id)
+        try container.email(email, forKey: .email)
+        try container.userName(userName, forKey: .userName)
+        try container.sphere(sphere, forKey: .sphere)
+        try container.avatarUrl(avatarUrl, forKey: .avatarUrl)
+        try container.gender(gender, forKey: .gender)
+        try container.bio(bio, forKey: .bio)
+    }
+
+    init(from decoder: Decoder) throws {
+        id = try container.decode(String.self, forKey: .id)
+        email = try container.decode(String.self, forKey: .email)
+        userName = try container.decode(String.self, forKey: .userName)
+        sphere = try container.decode(String.self, forKey: .sphere)
+        avatarUrl = try container.decode(String.self, forKey: .avatarUrl)
+        gender = try container.decode(String.self, forKey: .gender)
+        bio = try container.decode(String.self, forKey: .bio)
+    }
+}
+
+########### CChat ########################################################################################
+DROP TABLE IF EXIST
+CREATE TABLE `cChats` (
+    `chatId` VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `cChatSubscribers` (
+    `chatId` VARCHAR(255) DEFAULT NULL,
+    `subscriberId` VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+struct CChat: Codeble {
+ var chatId: String
+ var subscribers: [String]
+
+ enum CodingKeys: String, CodingKey {
+    case chatId
+    case subscribers
+ }
+
+ func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.chatId(chatId, forKey: .chatId)
+    try container.subscribers(subscribers, forKey: .subscribers)
+ }
+
+ init(from decoder: Decoder) throws {
+    chatId = try container.decode(String.self, forKey: .chatId)
+    subscribers = try container.decode(String.self, forKey: .subscribers)
+ }
+}
+
+########### CEvent ########################################################################################
+
+struct CEvent: Codable {
+    var id: String
+    var ownerId: String
+    var title: String
+    var description: String
+    var startTime: String
+    var duration: String
+    var chatId: String
+    var latitude: String
+    var longitude: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case ownerId
+        case title
+        case description
+        case startTime
+        case duration
+        case chatId
+        case latitude
+        case longitude
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(ownerId, forKey: .ownerId)
+        try container.encode(title, forKey: .title)
+        try container.encode(description, forKey: .description)
+        try container.encode(startTime, forKey: .startTime)
+        try container.encode(duration, forKey: .duration)
+        try container.encode(chatId, forKey: .chatId)
+        try container.encode(latitude, forKey: .latitude)
+        try container.encode(longitude, forKey: .longitude)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        ownerId = try container.decode(String.self, forKey: .ownerId)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decode(String.self, forKey: .description)
+        startTime = try container.decode(String.self, forKey: .startTime)
+        duration = try container.decode(String.self, forKey: .duration)
+        chatId = try container.decode(String.self, forKey: .chatId)
+        latitude = try container.decode(String.self, forKey: .latitude)
+        longitude = try container.decode(String.self, forKey: .longitude)
+    }
+}

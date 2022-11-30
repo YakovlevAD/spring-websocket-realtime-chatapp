@@ -31,14 +31,14 @@ public class MessageService {
 
     public List<Map<String,Object>> getListMessage(@PathVariable("from") Integer from, @PathVariable("to") Integer to){
         return jdbcTemplate.queryForList("select * from messages where (message_from=? and message_to=?) " +
-                "or (message_to=? and message_from=?) order by created_datetime asc",from,to,from,to);
+                "or (message_to=? and message_from=?) order by created_datetime asc", from, to, from, to);
     }
 
 
     public List<Map<String,Object>> getListMessageGroups(@PathVariable("groupid") Integer groupid){
         return jdbcTemplate.queryForList("select gm.*,us.name as name from group_messages gm " +
                 "join users us on us.id=gm.user_id " +
-                "where gm.group_id=? order by created_datetime asc",groupid);
+                "where gm.group_id=? order by created_datetime asc", groupid);
     }
 
 
