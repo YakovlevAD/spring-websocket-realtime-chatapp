@@ -2,7 +2,6 @@ package com.arisusantolie.springwebsocketrealtimechatapp.service;
 
 import com.arisusantolie.springwebsocketrealtimechatapp.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 @Service
 public class MessageService {
 
-    private List<ChatDTO> chats = new ArrayList<ChatDTO>();
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 

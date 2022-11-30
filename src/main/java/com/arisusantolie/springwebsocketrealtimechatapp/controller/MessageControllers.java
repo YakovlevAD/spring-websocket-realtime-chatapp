@@ -4,7 +4,6 @@ import com.arisusantolie.springwebsocketrealtimechatapp.dto.*;
 import com.arisusantolie.springwebsocketrealtimechatapp.service.MessageService;
 import com.arisusantolie.springwebsocketrealtimechatapp.service.UserAndGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
