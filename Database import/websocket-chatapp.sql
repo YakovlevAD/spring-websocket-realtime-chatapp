@@ -126,8 +126,8 @@ CREATE TABLE `prevEvents` (
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
   `message_text` varchar(255) DEFAULT NULL,
-  `message_from` int(11) DEFAULT NULL,
-  `message_to` int(11) DEFAULT NULL,
+  `message_from` VARCHAR(255) DEFAULT NULL,
+  `message_to` VARCHAR(255) DEFAULT NULL,
   `created_datetime` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
