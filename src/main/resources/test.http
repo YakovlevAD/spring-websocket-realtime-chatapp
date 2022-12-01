@@ -1,3 +1,14 @@
 GET http://45.141.79.219:8081/getAllEvents
 
 ###
+
+GET https://spotrum.com/getAllEvents
+
+###
+GET http://localhost:8081/getAllEvents
+
+###
+
+GET http://localhost:8081
+
+###
