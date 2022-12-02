@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
+//@Slf4j
 @Service
 public class MessageService {
 
@@ -40,21 +40,21 @@ public class MessageService {
                 }).collect(Collectors.toList());
         nList.forEach(chat -> {
             Arrays.stream(chat.subscribers).forEach(subscriberId -> {
-                log.debug(String.format("WS RS >>> /topic/messages/%s msg:%s", subscriberId, message));
+//                log.debug(String.format("WS RS >>> /topic/messages/%s msg:%s", subscriberId, message));
                 simpMessagingTemplate.convertAndSend("/topic/messages/" + subscriberId, message);
             });
         });
     }
 
     public List<Map<String, Object>> getListMessage(@PathVariable("from") Integer from, @PathVariable("to") Integer to) {
-        log.debug(String.format("WS RS >>> getListMessage from:%s to:%s", from, to));
+//        log.debug(String.format("WS RS >>> getListMessage from:%s to:%s", from, to));
         return jdbcTemplate.queryForList("select * from messages where (message_from=? and message_to=?) " +
                 "or (message_to=? and message_from=?) order by created_datetime asc", from, to, from, to);
     }
 
 
     public List<Map<String, Object>> getListMessageGroups(@PathVariable("groupid") Integer groupid) {
-        log.debug(String.format("WS RS >>> /getListMessageGroups grId:" + groupid));
+//        log.debug(String.format("WS RS >>> /getListMessageGroups grId:" + groupid));
         return jdbcTemplate.queryForList("select gm.*,us.name as name from group_messages gm " +
                 "join users us on us.id=gm.user_id " +
                 "where gm.group_id=? order by created_datetime asc", groupid);
@@ -62,7 +62,7 @@ public class MessageService {
 
 
     public void sendMessageGroup(Integer to, MessageGroupDTO message) {
-        log.debug(String.format("WS RS >>> /topic/messages/group/%s mes:%s", to, message));
+//        log.debug(String.format("WS RS >>> /topic/messages/group/%s mes:%s", to, message));
         jdbcTemplate.update("INSERT INTO `group_messages`(`group_id`, `user_id`, `messages`, `created_datetime`) " +
                 "VALUES (?,?,?,current_timestamp )", to, message.getMessage_from(), message.getMessage_text());
         message.setGroupId(to);
@@ -81,7 +81,7 @@ public class MessageService {
                     dto.setMessage_from(el.get("message_from").toString());
                     dto.setMessage_to(el.get("message_to").toString());
                     dto.setCreated_datetime(el.get("created_datetime").toString());
-                    log.debug(String.format("REST RS >>> /getMessagesById dto:%s", dto));
+//                    log.debug(String.format("REST RS >>> /getMessagesById dto:%s", dto));
                     return dto;
                 }).collect(Collectors.toList());
         return nList;
@@ -97,7 +97,7 @@ public class MessageService {
                             .replace("[", "")
                             .replace("]", "")
                             .split(", ");
-                    log.debug(String.format("REST RS >>> /getChatBySubscriberId dto:%s ", dto));
+//                    log.debug(String.format("REST RS >>> /getChatBySubscriberId dto:%s ", dto));
                     return dto;
                 }).collect(Collectors.toList());
         return nList;
@@ -111,14 +111,14 @@ public class MessageService {
     public void sendEvent(String to, EventDTO eventDTO) {
         jdbcTemplate.update("insert into events (id, title, description, location, likes, timestampStar) " +
                 "values (?,?,?,current_time )", eventDTO.id, eventDTO.title, eventDTO.description, eventDTO.location, eventDTO.likes);
-        log.debug(String.format("WS RS >>> /topic/events/%s event:%s", to, eventDTO));
+//        log.debug(String.format("WS RS >>> /topic/events/%s event:%s", to, eventDTO));
         simpMessagingTemplate.convertAndSend("/topic/events/" + to, eventDTO);
     }
 
     public void sendEvent(CEvent cEvent) {
         jdbcTemplate.update("insert into cEvents (id, ownerId, title, description, startTime, duration, chatId, latitude, longitude)" +
                 "values (?,?,?,?,?,?,?,?,?)", cEvent.id, cEvent.ownerId, cEvent.title, cEvent.description, cEvent.startTime, cEvent.duration, cEvent.chatId, cEvent.latitude, cEvent.longitude);
-        log.debug(String.format("WS RS >>> /topic/prevEvents/1 prevEvent:%s", cEvent));
+//        log.debug(String.format("WS RS >>> /topic/prevEvents/1 prevEvent:%s", cEvent));
         simpMessagingTemplate.convertAndSend("/topic/prevEvents/1", cEvent);
     }
 
@@ -143,7 +143,7 @@ public class MessageService {
                     dto.body = el.get("body").toString();
                     dto.dateStart = el.get("dateStart").toString();
                     dto.isPublicEvent = el.get("isPublicEvent").toString();
-                    log.debug(String.format("REST RS >>> /v1/getAllEvents event:%s", dto));
+//                    log.debug(String.format("REST RS >>> /v1/getAllEvents event:%s", dto));
                     return dto;
                 }).collect(Collectors.toList());
         return nList;
@@ -163,7 +163,7 @@ public class MessageService {
                     dto.chatId = el.get("chatId").toString();
                     dto.latitude = el.get("latitude").toString();
                     dto.longitude = el.get("longitude").toString();
-                    log.debug(String.format("REST RS >>> /v1/getAllEvents event:%s", dto));
+//                    log.debug(String.format("REST RS >>> /v1/getAllEvents event:%s", dto));
                     return dto;
                 }).collect(Collectors.toList());
         return nList;
@@ -172,7 +172,7 @@ public class MessageService {
     public void postNewEvent(PreviewEventDTO pEventDTO) {
         jdbcTemplate.update("insert into prevEvents (ownerId, id, createrId, status, duration, title, body, dateStart, isPublicEvent) " +
                 "values (?,?,?,?,?,?,?,?,?)", pEventDTO.ownerId, pEventDTO.id, pEventDTO.createrId, pEventDTO.status, pEventDTO.duration, pEventDTO.title, pEventDTO.body, pEventDTO.dateStart, pEventDTO.isPublicEvent);
-        log.debug(String.format("WS RS >>> /topic/prevEvents/1 prevEvent:%s", pEventDTO));
+//        log.debug(String.format("WS RS >>> /topic/prevEvents/1 prevEvent:%s", pEventDTO));
         simpMessagingTemplate.convertAndSend("/topic/prevEvents/1", pEventDTO);
     }
 }
